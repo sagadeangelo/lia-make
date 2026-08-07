@@ -6,17 +6,11 @@ import 'canvas_controller.dart';
 /// LIA-Make
 /// Node Layer
 /// ------------------------------------------------------------
-/// Capa encargada de renderizar todos los nodos del Canvas.
+/// Renderiza todos los nodos del Canvas.
 ///
-/// En futuras versiones:
-///
-/// • Renderizado de nodos
-/// • Drag & Drop
-/// • Selección
-/// • Resize
-/// • Multi selección
-/// • Hover
-/// • Animaciones
+/// En esta primera versión los nodos utilizan coordenadas del
+/// mundo (World Space) y son transformados a coordenadas de
+/// pantalla mediante el Viewport.
 /// ============================================================
 
 class NodeLayer extends StatelessWidget {
@@ -29,26 +23,36 @@ class NodeLayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final viewport = controller.viewport;
+
     return IgnorePointer(
       child: Stack(
         children: [
           //----------------------------------------------------
-          // Placeholder
+          // HOME SCREEN
           //----------------------------------------------------
 
-          Positioned(
-            left: 220,
-            top: 160,
-            child: _DemoNode(
+          _WorldNode(
+            worldX: 220,
+            worldY: 160,
+            viewportOffsetX: viewport.offsetX,
+            viewportOffsetY: viewport.offsetY,
+            child: const _DemoNode(
               title: "Home Screen",
               color: Colors.blue,
             ),
           ),
 
-          Positioned(
-            left: 520,
-            top: 320,
-            child: _DemoNode(
+          //----------------------------------------------------
+          // LOGIN API
+          //----------------------------------------------------
+
+          _WorldNode(
+            worldX: 620,
+            worldY: 380,
+            viewportOffsetX: viewport.offsetX,
+            viewportOffsetY: viewport.offsetY,
+            child: const _DemoNode(
               title: "Login API",
               color: Colors.green,
             ),
@@ -60,10 +64,40 @@ class NodeLayer extends StatelessWidget {
 }
 
 /// ============================================================
-/// Demo Node
-/// ------------------------------------------------------------
-/// Nodo temporal.
-/// Será reemplazado por NodeWidget.
+/// WORLD NODE
+///
+/// Convierte coordenadas del mundo a coordenadas de pantalla.
+/// ============================================================
+
+class _WorldNode extends StatelessWidget {
+  final double worldX;
+  final double worldY;
+
+  final double viewportOffsetX;
+  final double viewportOffsetY;
+
+  final Widget child;
+
+  const _WorldNode({
+    required this.worldX,
+    required this.worldY,
+    required this.viewportOffsetX,
+    required this.viewportOffsetY,
+    required this.child,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      left: worldX + viewportOffsetX,
+      top: worldY + viewportOffsetY,
+      child: child,
+    );
+  }
+}
+
+/// ============================================================
+/// DEMO NODE
 /// ============================================================
 
 class _DemoNode extends StatelessWidget {
@@ -78,44 +112,46 @@ class _DemoNode extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 180,
-      padding: const EdgeInsets.all(16),
-
+      width: 220,
+      height: 86,
+      padding: const EdgeInsets.symmetric(
+        horizontal: 18,
+      ),
       decoration: BoxDecoration(
         color: const Color(0xFF252525),
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(18),
         border: Border.all(
           color: color,
           width: 2,
         ),
         boxShadow: const [
           BoxShadow(
-            blurRadius: 12,
-            offset: Offset(0, 4),
-            color: Colors.black26,
+            color: Colors.black38,
+            blurRadius: 18,
+            offset: Offset(0, 8),
           ),
         ],
       ),
-
       child: Row(
         children: [
           CircleAvatar(
-            radius: 14,
+            radius: 18,
             backgroundColor: color,
             child: const Icon(
               Icons.circle,
               color: Colors.white,
-              size: 10,
+              size: 12,
             ),
           ),
 
-          const SizedBox(width: 12),
+          const SizedBox(width: 16),
 
           Expanded(
             child: Text(
               title,
               style: const TextStyle(
                 color: Colors.white,
+                fontSize: 22,
                 fontWeight: FontWeight.w600,
               ),
             ),

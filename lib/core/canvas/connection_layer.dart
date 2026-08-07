@@ -6,16 +6,13 @@ import 'canvas_controller.dart';
 /// LIA-Make
 /// Connection Layer
 /// ------------------------------------------------------------
-/// Capa encargada de dibujar todas las conexiones entre nodos.
+/// Renderiza todas las conexiones entre nodos.
 ///
-/// Futuro:
+/// Esta primera versión utiliza coordenadas del mundo (World
+/// Space) y las transforma utilizando el Viewport.
 ///
-/// • Curvas Bézier
-/// • Conexiones animadas
-/// • Preview mientras se arrastra
-/// • Selección
-/// • Highlight
-/// • Estados (Activo / Error / Ejecutando)
+/// Más adelante esta capa dibujará conexiones reales obtenidas
+/// desde el CanvasState.
 /// ============================================================
 
 class NodeConnectionLayer extends StatelessWidget {
@@ -44,48 +41,66 @@ class _ConnectionPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    final viewport = controller.viewport;
+
+    //----------------------------------------------------------
+    // Coordenadas del mundo
+    //----------------------------------------------------------
+
+    const Offset worldStart = Offset(440, 203);
+    const Offset worldEnd = Offset(620, 423);
+
+    //----------------------------------------------------------
+    // Conversión Mundo -> Pantalla
+    //----------------------------------------------------------
+
+    final Offset start = Offset(
+      worldStart.dx + viewport.offsetX,
+      worldStart.dy + viewport.offsetY,
+    );
+
+    final Offset end = Offset(
+      worldEnd.dx + viewport.offsetX,
+      worldEnd.dy + viewport.offsetY,
+    );
+
+    //----------------------------------------------------------
+    // Pintura
+    //----------------------------------------------------------
+
     final paint = Paint()
       ..color = const Color(0xFF6C63FF)
-      ..strokeWidth = 3
+      ..strokeWidth = 4
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;
 
-    //----------------------------------------------------------
-    // DEMO CONNECTION
-    //----------------------------------------------------------
-
-    const Offset start = Offset(400, 185);
-    const Offset end = Offset(520, 345);
-
-    final path = Path();
-
-    path.moveTo(start.dx, start.dy);
-
-    path.cubicTo(
-      start.dx + 120,
-      start.dy,
-      end.dx - 120,
-      end.dy,
-      end.dx,
-      end.dy,
-    );
+    final path = Path()
+      ..moveTo(start.dx, start.dy)
+      ..cubicTo(
+        start.dx + 140,
+        start.dy,
+        end.dx - 140,
+        end.dy,
+        end.dx,
+        end.dy,
+      );
 
     canvas.drawPath(path, paint);
 
     //----------------------------------------------------------
-    // End Points
+    // Puntos de conexión
     //----------------------------------------------------------
 
     final pointPaint = Paint()
       ..color = const Color(0xFF6C63FF)
       ..style = PaintingStyle.fill;
 
-    canvas.drawCircle(start, 5, pointPaint);
-    canvas.drawCircle(end, 5, pointPaint);
+    canvas.drawCircle(start, 6, pointPaint);
+    canvas.drawCircle(end, 6, pointPaint);
   }
 
   @override
   bool shouldRepaint(covariant _ConnectionPainter oldDelegate) {
-    return true;
+    return oldDelegate.controller.viewport != controller.viewport;
   }
 }
