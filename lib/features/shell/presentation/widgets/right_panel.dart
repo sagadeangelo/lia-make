@@ -8,8 +8,6 @@ import '../../../../../design_system/typography/app_typography.dart';
 /// ============================================================
 /// LIA-Make
 /// Right Panel
-///
-/// AI Companion
 /// ============================================================
 
 class RightPanel extends StatelessWidget {
@@ -20,7 +18,6 @@ class RightPanel extends StatelessWidget {
     return Container(
       color: AppColors.surface,
       padding: const EdgeInsets.all(AppSpacing.lg),
-
       child: Column(
         children: [
           //------------------------------------------------------
@@ -42,6 +39,7 @@ class RightPanel extends StatelessWidget {
 
               Expanded(
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
@@ -50,7 +48,6 @@ class RightPanel extends StatelessWidget {
                         color: AppColors.textPrimary,
                       ),
                     ),
-
                     Text(
                       "AI Companion",
                       style: AppTypography.bodySmall.copyWith(
@@ -63,7 +60,7 @@ class RightPanel extends StatelessWidget {
             ],
           ),
 
-          const SizedBox(height: AppSpacing.xxl),
+          const SizedBox(height: AppSpacing.lg),
 
           //------------------------------------------------------
           // AI CARD
@@ -72,7 +69,6 @@ class RightPanel extends StatelessWidget {
           Expanded(
             child: Container(
               width: double.infinity,
-
               padding: const EdgeInsets.all(AppSpacing.lg),
 
               decoration: BoxDecoration(
@@ -80,35 +76,37 @@ class RightPanel extends StatelessWidget {
                 borderRadius: AppRadius.lgRadius,
               ),
 
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.smart_toy_outlined,
-                    size: 80,
-                    color: AppColors.primary,
-                  ),
-
-                  const SizedBox(height: AppSpacing.xl),
-
-                  Text(
-                    "Welcome!",
-                    style: AppTypography.headlineSmall.copyWith(
-                      color: AppColors.textPrimary,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.smart_toy_outlined,
+                      size: 56,
+                      color: AppColors.primary,
                     ),
-                  ),
 
-                  const SizedBox(height: AppSpacing.md),
+                    const SizedBox(height: AppSpacing.md),
 
-                  Text(
-                    "I'm here to help you build your application.\n\n"
-                    "Describe your idea and I'll guide you step by step.",
-                    textAlign: TextAlign.center,
-                    style: AppTypography.bodyMedium.copyWith(
-                      color: AppColors.textSecondary,
+                    Text(
+                      "Welcome!",
+                      style: AppTypography.headlineSmall.copyWith(
+                        color: AppColors.textPrimary,
+                      ),
                     ),
-                  ),
-                ],
+
+                    const SizedBox(height: AppSpacing.sm),
+
+                    Text(
+                      "I'm here to help you build your application.\n\n"
+                      "Describe your idea and I'll guide you step by step.",
+                      textAlign: TextAlign.center,
+                      style: AppTypography.bodyMedium.copyWith(
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

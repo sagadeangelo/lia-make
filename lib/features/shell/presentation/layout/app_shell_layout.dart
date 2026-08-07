@@ -17,7 +17,7 @@ import '../widgets/top_bar.dart';
 class AppShellLayout extends StatelessWidget {
   const AppShellLayout({super.key});
 
-  static const double _topBarHeight = 72;
+  static const double _topBarHeight = 88;
   static const double _leftPanelWidth = 300;
   static const double _rightPanelWidth = 380;
   static const double _bottomConsoleHeight = 180;
@@ -28,34 +28,31 @@ class AppShellLayout extends StatelessWidget {
       color: AppColors.background,
       child: Column(
         children: [
-          // ====================================================
+          // ===========================
           // TOP BAR
-          // ====================================================
+          // ===========================
 
           const SizedBox(
             height: _topBarHeight,
             child: TopBar(),
           ),
 
-          // ====================================================
-          // MAIN CONTENT
-          // ====================================================
+          // ===========================
+          // MAIN AREA
+          // ===========================
 
           Expanded(
             child: Row(
               children: [
-                // Left Panel
                 const SizedBox(
                   width: _leftPanelWidth,
                   child: LeftPanel(),
                 ),
 
-                // Canvas
                 const Expanded(
                   child: CanvasArea(),
                 ),
 
-                // Right Panel
                 const SizedBox(
                   width: _rightPanelWidth,
                   child: RightPanel(),
@@ -64,9 +61,9 @@ class AppShellLayout extends StatelessWidget {
             ),
           ),
 
-          // ====================================================
-          // BOTTOM CONSOLE
-          // ====================================================
+          // ===========================
+          // CONSOLE
+          // ===========================
 
           const SizedBox(
             height: _bottomConsoleHeight,

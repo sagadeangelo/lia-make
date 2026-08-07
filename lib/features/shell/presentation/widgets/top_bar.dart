@@ -8,8 +8,6 @@ import '../../../../../design_system/typography/app_typography.dart';
 /// ============================================================
 /// LIA-Make
 /// Top Bar
-///
-/// Barra superior principal.
 /// ============================================================
 
 class TopBar extends StatelessWidget {
@@ -18,17 +16,28 @@ class TopBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColors.surface,
-      padding: AppSpacing.page,
+      decoration: const BoxDecoration(
+        color: AppColors.surface,
+        border: Border(
+          bottom: BorderSide(
+            color: AppColors.border,
+            width: 1,
+          ),
+        ),
+      ),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.xl,
+      ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // -----------------------------------------------------
+          //======================================================
           // Logo
-          // -----------------------------------------------------
+          //======================================================
 
           Container(
-            width: 42,
-            height: 42,
+            width: 46,
+            height: 46,
             decoration: BoxDecoration(
               color: AppColors.primary,
               borderRadius: AppRadius.mdRadius,
@@ -41,38 +50,42 @@ class TopBar extends StatelessWidget {
 
           const SizedBox(width: AppSpacing.lg),
 
-          // -----------------------------------------------------
-          // Nombre
-          // -----------------------------------------------------
+          //======================================================
+          // Título
+          //======================================================
 
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'LIA-Make',
-                style: AppTypography.titleLarge.copyWith(
-                  color: AppColors.textPrimary,
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'LIA-Make',
+                  style: AppTypography.titleLarge.copyWith(
+                    color: AppColors.textPrimary,
+                  ),
                 ),
-              ),
-              Text(
-                "Let's make your apps come true.",
-                style: AppTypography.bodySmall.copyWith(
-                  color: AppColors.textSecondary,
+
+                const SizedBox(height: 2),
+
+                Text(
+                  "Let's make your apps come true.",
+                  style: AppTypography.bodySmall.copyWith(
+                    color: AppColors.textSecondary,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
 
-          const Spacer(),
-
-          // -----------------------------------------------------
+          //======================================================
           // Estado
-          // -----------------------------------------------------
+          //======================================================
 
           Container(
             padding: const EdgeInsets.symmetric(
-              horizontal: 12,
+              horizontal: 14,
               vertical: 8,
             ),
             decoration: BoxDecoration(
@@ -80,11 +93,12 @@ class TopBar extends StatelessWidget {
               borderRadius: AppRadius.pill,
             ),
             child: Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 const Icon(
                   Icons.circle,
-                  color: AppColors.success,
                   size: 10,
+                  color: AppColors.success,
                 ),
 
                 const SizedBox(width: 8),
@@ -99,32 +113,33 @@ class TopBar extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(width: AppSpacing.xl),
+          const SizedBox(width: AppSpacing.lg),
 
-          // -----------------------------------------------------
+          //======================================================
           // Configuración
-          // -----------------------------------------------------
+          //======================================================
 
           IconButton(
-            onPressed: () {},
             tooltip: 'Settings',
+            onPressed: () {},
             icon: const Icon(
               Icons.settings_outlined,
               color: AppColors.textPrimary,
             ),
           ),
 
-          // -----------------------------------------------------
+          const SizedBox(width: AppSpacing.sm),
+
+          //======================================================
           // Usuario
-          // -----------------------------------------------------
+          //======================================================
 
           const CircleAvatar(
-            radius: 18,
+            radius: 20,
             backgroundColor: AppColors.primary,
             child: Icon(
               Icons.person,
               color: Colors.white,
-              size: 18,
             ),
           ),
         ],
