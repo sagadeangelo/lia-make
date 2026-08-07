@@ -1,45 +1,150 @@
-# Miscellaneous
-*.class
-*.log
-*.pyc
-*.swp
-.DS_Store
-.atom/
-.build/
-.buildlog/
-.history
-.svn/
-.swiftpm/
-migrate_working_dir/
+# ==========================================================
+# LIA-Make
+# Git Ignore
+# ==========================================================
 
-# IntelliJ related
-*.iml
-*.ipr
-*.iws
-.idea/
-
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
-#.vscode/
-
-# Flutter/Dart/Pub related
-**/doc/api/
-**/ios/Flutter/.last_build_id
+# Flutter / Dart
 .dart_tool/
-.flutter-plugins-dependencies
-.pub-cache/
+.packages
 .pub/
-/build/
-/coverage/
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+.flutter-versions
+.pub-cache/
+.packages
 
-# Symbolication related
-app.*.symbols
+# Generated
+generated_plugin_registrant.dart
 
-# Obfuscation related
-app.*.map.json
+# IDE
+.idea/
+.vscode/
+*.iml
 
-# Android Studio will place build artifacts here
-/android/app/debug
-/android/app/profile
-/android/app/release
+# VS Code Workspace
+*.code-workspace
+
+# Android
+android/.gradle/
+android/local.properties
+android/key.properties
+android/app/*.keystore
+android/app/*.jks
+
+# iOS
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+ios/Flutter/Generated.xcconfig
+ios/Flutter/flutter_export_environment.sh
+
+# macOS
+macos/Pods/
+
+# Linux
+linux/flutter/ephemeral/
+
+# Windows
+windows/flutter/ephemeral/
+
+# Web
+web/.dart_tool/
+
+# Logs
+*.log
+logs/
+
+# Crash Reports
+crash_logs/
+
+# Coverage
+coverage/
+
+# Cache
+.cache/
+.tmp/
+temp/
+tmp/
+
+# Secrets
+.env
+.env.*
+secrets.json
+firebase.json
+google-services.json
+GoogleService-Info.plist
+
+# Certificates
+*.p12
+*.pem
+*.key
+
+# AI Models
+models/
+checkpoints/
+loras/
+embeddings/
+
+# Local Databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Exported Apps
+exports/
+release/
+dist/
+
+# Generated Documentation
+docs/generated/
+
+# User Settings
+.settings/
+
+# Screenshots
+screenshots/
+
+# Videos
+recordings/
+
+# Assets Cache
+assets/cache/
+
+# LIA Cloud Cache
+lia_cache/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Backup Files
+*.bak
+*.old
+*.orig
+*.tmp
+
+# Git
+*.swp
+*.swo
+
+# Node
+node_modules/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Rust
+target/
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+
+# Misc
+*.lock~
