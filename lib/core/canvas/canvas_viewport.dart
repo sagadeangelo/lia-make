@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 
 /// ============================================================
 /// LIA-Make
-/// Viewport
+/// Canvas Viewport
 /// ------------------------------------------------------------
 /// Representa la cámara del Canvas.
 ///
@@ -18,87 +18,88 @@ import 'package:flutter/foundation.dart';
 /// ============================================================
 
 @immutable
-class Viewport {
+class CanvasViewport {
   /// Posición del mundo.
   final double offsetX;
+
   final double offsetY;
 
   /// Nivel de zoom.
   final double zoom;
 
-  const Viewport({
+  const CanvasViewport({
     required this.offsetX,
     required this.offsetY,
     required this.zoom,
   });
 
-  /// ----------------------------------------------------------
+  ///----------------------------------------------------------
   /// Estado inicial
-  /// ----------------------------------------------------------
+  ///----------------------------------------------------------
 
-  const Viewport.initial()
+  const CanvasViewport.initial()
       : offsetX = 0,
         offsetY = 0,
         zoom = 1.0;
 
-  /// ----------------------------------------------------------
+  ///----------------------------------------------------------
   /// CopyWith
-  /// ----------------------------------------------------------
+  ///----------------------------------------------------------
 
-  Viewport copyWith({
+  CanvasViewport copyWith({
     double? offsetX,
     double? offsetY,
     double? zoom,
   }) {
-    return Viewport(
+    return CanvasViewport(
       offsetX: offsetX ?? this.offsetX,
       offsetY: offsetY ?? this.offsetY,
       zoom: zoom ?? this.zoom,
     );
   }
 
-  /// ----------------------------------------------------------
+  ///----------------------------------------------------------
   /// Traducción
-  /// ----------------------------------------------------------
+  ///----------------------------------------------------------
 
-  Viewport translate({
+  CanvasViewport translate({
     required double dx,
     required double dy,
   }) {
-    return Viewport(
+    return CanvasViewport(
       offsetX: offsetX + dx,
       offsetY: offsetY + dy,
       zoom: zoom,
     );
   }
 
-  /// ----------------------------------------------------------
+  ///----------------------------------------------------------
   /// Escalado
-  /// ----------------------------------------------------------
+  ///----------------------------------------------------------
 
-  Viewport scale(double value) {
-    return Viewport(
+  CanvasViewport scale(double value) {
+    return CanvasViewport(
       offsetX: offsetX,
       offsetY: offsetY,
       zoom: value.clamp(0.25, 4.0),
     );
   }
 
-  /// ----------------------------------------------------------
+  ///----------------------------------------------------------
   /// Reset
-  /// ----------------------------------------------------------
+  ///----------------------------------------------------------
 
-  Viewport reset() {
-    return const Viewport.initial();
+  CanvasViewport reset() {
+    return const CanvasViewport.initial();
   }
 
-  /// ----------------------------------------------------------
+  ///----------------------------------------------------------
   /// Debug
-  /// ----------------------------------------------------------
+  ///----------------------------------------------------------
 
   @override
   String toString() {
-    return 'Viewport('
+    return 'CanvasViewport('
         'offsetX: $offsetX, '
         'offsetY: $offsetY, '
         'zoom: $zoom'
@@ -108,7 +109,7 @@ class Viewport {
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        other is Viewport &&
+        other is CanvasViewport &&
             runtimeType == other.runtimeType &&
             offsetX == other.offsetX &&
             offsetY == other.offsetY &&

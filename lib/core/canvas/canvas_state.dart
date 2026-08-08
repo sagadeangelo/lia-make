@@ -1,72 +1,200 @@
-import 'viewport.dart';
+import 'package:flutter/material.dart';
+
+import '../nodes/models/canvas_node.dart';
+import '../nodes/models/node_connection.dart';
 
 /// ============================================================
 /// LIA-Make
 /// Canvas State
 /// ------------------------------------------------------------
-/// Estado completo del Canvas.
+/// Estado global del Canvas.
 ///
-/// Este objeto representa toda la información necesaria para
-/// reconstruir el Canvas en cualquier momento.
+/// Toda la información del editor vive aquí.
 ///
-/// En futuras versiones almacenará:
+/// Futuras responsabilidades:
 ///
-/// • Viewport
 /// • Nodos
 /// • Conexiones
 /// • Selección
-/// • Herramienta activa
-/// • Grid
-/// • Snap
-/// • Historial
+/// • Zoom
+/// • Pan
+/// • Clipboard
+/// • Undo / Redo
+/// • Multi Selection
 /// ============================================================
 
-class CanvasState {
-  final Viewport viewport;
+class CanvasState extends ChangeNotifier {
+  CanvasState();
 
-  const CanvasState({
-    required this.viewport,
-  });
+  //------------------------------------------------------------
+  // NODES
+  //------------------------------------------------------------
 
-  /// ----------------------------------------------------------
-  /// Estado inicial
-  /// ----------------------------------------------------------
+  final List<CanvasNode> _nodes = [];
 
-  factory CanvasState.initial() {
-    return const CanvasState(
-      viewport: Viewport.initial(),
+  List<CanvasNode> get nodes =>
+      List.unmodifiable(_nodes);
+
+  //------------------------------------------------------------
+  // CONNECTIONS
+  //------------------------------------------------------------
+
+  final List<NodeConnection> _connections = [];
+
+  List<NodeConnection> get connections =>
+      List.unmodifiable(_connections);
+
+  //------------------------------------------------------------
+  // SELECTION
+  //------------------------------------------------------------
+
+  String? _selectedNodeId;
+
+  String? get selectedNodeId => _selectedNodeId;
+
+  CanvasNode? get selectedNode {
+    if (_selectedNodeId == null) {
+      return null;
+    }
+
+    try {
+      return _nodes.firstWhere(
+        (node) => node.id == _selectedNodeId,
+      );
+    } catch (_) {
+      return null;
+    }
+  }
+
+  //------------------------------------------------------------
+  // NODES
+  //------------------------------------------------------------
+
+  void addNode(CanvasNode node) {
+    _nodes.add(node);
+    notifyListeners();
+  }
+
+  void addNodes(List<CanvasNode> nodes) {
+    _nodes.addAll(nodes);
+    notifyListeners();
+  }
+
+  void removeNode(String id) {
+    _nodes.removeWhere(
+      (node) => node.id == id,
     );
-  }
 
-  /// ----------------------------------------------------------
-  /// Copy With
-  /// ----------------------------------------------------------
-
-  CanvasState copyWith({
-    Viewport? viewport,
-  }) {
-    return CanvasState(
-      viewport: viewport ?? this.viewport,
+    _connections.removeWhere(
+      (connection) =>
+          connection.fromNodeId == id ||
+          connection.toNodeId == id,
     );
+
+    if (_selectedNodeId == id) {
+      _selectedNodeId = null;
+    }
+
+    notifyListeners();
   }
 
-  @override
-  String toString() {
-    return '''
-CanvasState(
-  viewport: $viewport
-)
-''';
+  //------------------------------------------------------------
+  // MOVE
+  //------------------------------------------------------------
+
+  void moveNode(
+    String id,
+    Offset delta,
+  ) {
+    final index = _nodes.indexWhere(
+      (node) => node.id == id,
+    );
+
+    if (index == -1) {
+      return;
+    }
+
+    final node = _nodes[index];
+
+    node.position += delta;
+
+    notifyListeners();
   }
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        other is CanvasState &&
-            runtimeType == other.runtimeType &&
-            viewport == other.viewport;
+  //------------------------------------------------------------
+  // SELECTION
+  //------------------------------------------------------------
+
+  void selectNode(String id) {
+    _selectedNodeId = id;
+
+    for (final node in _nodes) {
+      node.selected = node.id == id;
+    }
+
+    notifyListeners();
   }
 
-  @override
-  int get hashCode => viewport.hashCode;
+  void clearSelection() {
+    _selectedNodeId = null;
+
+    for (final node in _nodes) {
+      node.selected = false;
+    }
+
+    notifyListeners();
+  }
+
+  //------------------------------------------------------------
+  // CONNECTIONS
+  //------------------------------------------------------------
+
+  void addConnection(
+    NodeConnection connection,
+  ) {
+    _connections.add(connection);
+
+    notifyListeners();
+  }
+
+  void removeConnection(
+    String id,
+  ) {
+    _connections.removeWhere(
+      (c) => c.id == id,
+    );
+
+    notifyListeners();
+  }
+
+  //------------------------------------------------------------
+  // CLEAR
+  //------------------------------------------------------------
+
+  void clear() {
+    _nodes.clear();
+    _connections.clear();
+    _selectedNodeId = null;
+
+    notifyListeners();
+  }
+
+  //------------------------------------------------------------
+  // HELPERS
+  //------------------------------------------------------------
+
+  bool get hasSelection =>
+      _selectedNodeId != null;
+
+  bool get hasNodes =>
+      _nodes.isNotEmpty;
+
+  bool get hasConnections =>
+      _connections.isNotEmpty;
+
+  int get nodeCount =>
+      _nodes.length;
+
+  int get connectionCount =>
+      _connections.length;
 }

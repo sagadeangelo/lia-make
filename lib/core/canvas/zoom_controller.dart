@@ -1,4 +1,4 @@
-import 'viewport.dart';
+import 'canvas_viewport.dart';
 
 /// ============================================================
 /// LIA-Make
@@ -12,7 +12,7 @@ import 'viewport.dart';
 /// • Zoom absoluto
 /// • Limitar niveles mínimos y máximos
 ///
-/// En futuras versiones:
+/// Futuras versiones:
 /// • Zoom hacia el cursor
 /// • Zoom animado
 /// • Zoom to Fit
@@ -26,69 +26,82 @@ class ZoomController {
 
   const ZoomController();
 
-  /// ----------------------------------------------------------
-  /// Zoom absoluto
-  /// ----------------------------------------------------------
+  //------------------------------------------------------------
+  // Zoom absoluto
+  //------------------------------------------------------------
 
-  Viewport setZoom(
-    Viewport viewport,
+  CanvasViewport setZoom(
+    CanvasViewport viewport,
     double zoom,
   ) {
     return viewport.copyWith(
-      zoom: zoom.clamp(minZoom, maxZoom),
+      zoom: zoom.clamp(
+        minZoom,
+        maxZoom,
+      ),
     );
   }
 
-  /// ----------------------------------------------------------
-  /// Zoom +
-  /// ----------------------------------------------------------
+  //------------------------------------------------------------
+  // Zoom +
+  //------------------------------------------------------------
 
-  Viewport zoomIn(Viewport viewport) {
+  CanvasViewport zoomIn(
+    CanvasViewport viewport,
+  ) {
     return setZoom(
       viewport,
       viewport.zoom + zoomStep,
     );
   }
 
-  /// ----------------------------------------------------------
-  /// Zoom -
-  /// ----------------------------------------------------------
+  //------------------------------------------------------------
+  // Zoom -
+  //------------------------------------------------------------
 
-  Viewport zoomOut(Viewport viewport) {
+  CanvasViewport zoomOut(
+    CanvasViewport viewport,
+  ) {
     return setZoom(
       viewport,
       viewport.zoom - zoomStep,
     );
   }
 
-  /// ----------------------------------------------------------
-  /// Reset
-  /// ----------------------------------------------------------
+  //------------------------------------------------------------
+  // Reset
+  //------------------------------------------------------------
 
-  Viewport reset(Viewport viewport) {
+  CanvasViewport reset(
+    CanvasViewport viewport,
+  ) {
     return viewport.copyWith(
       zoom: 1.0,
     );
   }
 
-  /// ----------------------------------------------------------
-  /// Validación
-  /// ----------------------------------------------------------
+  //------------------------------------------------------------
+  // Validación
+  //------------------------------------------------------------
 
-  bool canZoomIn(Viewport viewport) {
+  bool canZoomIn(
+    CanvasViewport viewport,
+  ) {
     return viewport.zoom < maxZoom;
   }
 
-  bool canZoomOut(Viewport viewport) {
+  bool canZoomOut(
+    CanvasViewport viewport,
+  ) {
     return viewport.zoom > minZoom;
   }
 
-  /// ----------------------------------------------------------
-  /// Mouse Wheel
-  /// ----------------------------------------------------------
+  //------------------------------------------------------------
+  // Mouse Wheel
+  //------------------------------------------------------------
 
-  Viewport zoomFromScroll({
-    required Viewport viewport,
+  CanvasViewport zoomFromScroll({
+    required CanvasViewport viewport,
     required double scrollDelta,
   }) {
     if (scrollDelta < 0) {

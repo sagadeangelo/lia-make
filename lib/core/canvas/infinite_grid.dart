@@ -1,18 +1,18 @@
-import 'package:flutter/material.dart' hide Viewport;
+import 'package:flutter/material.dart';
 
-import 'viewport.dart';
+import 'canvas_viewport.dart';
 
 /// ============================================================
 /// LIA-Make
 /// Infinite Grid
 /// ------------------------------------------------------------
-/// Dibuja un grid infinito utilizando el Viewport.
+/// Dibuja un grid infinito utilizando el CanvasViewport.
 ///
 /// El grid se desplaza y escala junto con la cámara.
 /// ============================================================
 
 class InfiniteGrid extends StatelessWidget {
-  final Viewport viewport;
+  final CanvasViewport viewport;
 
   const InfiniteGrid({
     super.key,
@@ -31,11 +31,11 @@ class InfiniteGrid extends StatelessWidget {
 }
 
 /// ============================================================
-/// Painter
+/// Infinite Grid Painter
 /// ============================================================
 
 class InfiniteGridPainter extends CustomPainter {
-  final Viewport viewport;
+  final CanvasViewport viewport;
 
   const InfiniteGridPainter(this.viewport);
 
@@ -53,11 +53,9 @@ class InfiniteGridPainter extends CustomPainter {
       ..color = const Color(0xFF353535)
       ..strokeWidth = 1.4;
 
-    final double startX =
-        viewport.offsetX % spacing;
+    final double startX = viewport.offsetX % spacing;
 
-    final double startY =
-        viewport.offsetY % spacing;
+    final double startY = viewport.offsetY % spacing;
 
     //----------------------------------------------------------
     // Vertical Lines

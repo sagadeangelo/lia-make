@@ -1,53 +1,67 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
+import '../nodes/models/canvas_node.dart';
+import '../nodes/models/node_connection.dart';
 import 'canvas_state.dart';
-import 'viewport.dart';
+import 'canvas_viewport.dart';
 
 /// ============================================================
 /// LIA-Make
 /// Canvas Controller
 /// ------------------------------------------------------------
-/// Controlador principal del Canvas.
+/// Cerebro del editor.
 ///
 /// Responsabilidades:
-/// • Mantener el estado del Canvas.
-/// • Mover el viewport.
-/// • Controlar el zoom.
-/// • Notificar cambios a la UI.
 ///
-/// En futuras versiones también controlará:
-/// • Selección
-/// • Drag & Drop
-/// • Conexiones
-/// • Historial (Undo / Redo)
+/// • Controlar el Viewport
+/// • Zoom
+/// • Pan
+/// • Delegar operaciones al CanvasState
+///
+/// El CanvasState representa el documento.
+/// El Controller controla la navegación.
 /// ============================================================
 
 class CanvasController extends ChangeNotifier {
   CanvasController({
-    CanvasState? initialState,
-  }) : _state = initialState ?? CanvasState.initial();
+    CanvasState? state,
+    CanvasViewport? viewport,
+  })  : _state = state ?? CanvasState(),
+        _viewport = viewport ?? const CanvasViewport.initial();
 
-  CanvasState _state;
+  //------------------------------------------------------------
+  // STATE
+  //------------------------------------------------------------
+
+  final CanvasState _state;
 
   CanvasState get state => _state;
 
-  Viewport get viewport => _state.viewport;
-
-  double get zoom => viewport.zoom;
-
-  // ============================================================
+  //------------------------------------------------------------
   // VIEWPORT
-  // ============================================================
+  //------------------------------------------------------------
+
+  CanvasViewport _viewport;
+
+  CanvasViewport get viewport => _viewport;
+
+  //------------------------------------------------------------
+  // ZOOM
+  //------------------------------------------------------------
+
+  double get zoom => _viewport.zoom;
+
+  //------------------------------------------------------------
+  // PAN
+  //------------------------------------------------------------
 
   void moveBy({
     required double dx,
     required double dy,
   }) {
-    _state = _state.copyWith(
-      viewport: viewport.translate(
-        dx: dx,
-        dy: dy,
-      ),
+    _viewport = _viewport.translate(
+      dx: dx,
+      dy: dy,
     );
 
     notifyListeners();
@@ -57,27 +71,21 @@ class CanvasController extends ChangeNotifier {
     required double x,
     required double y,
   }) {
-    _state = _state.copyWith(
-      viewport: viewport.copyWith(
-        offsetX: x,
-        offsetY: y,
-      ),
+    _viewport = _viewport.copyWith(
+      offsetX: x,
+      offsetY: y,
     );
 
     notifyListeners();
   }
 
-  // ============================================================
+  //------------------------------------------------------------
   // ZOOM
-  // ============================================================
+  //------------------------------------------------------------
 
   void setZoom(double value) {
-    final clamped = value.clamp(0.25, 4.0);
-
-    _state = _state.copyWith(
-      viewport: viewport.copyWith(
-        zoom: clamped,
-      ),
+    _viewport = _viewport.copyWith(
+      zoom: value.clamp(0.25, 4.0),
     );
 
     notifyListeners();
@@ -91,27 +99,92 @@ class CanvasController extends ChangeNotifier {
     setZoom(zoom - step);
   }
 
-  // ============================================================
-  // RESET
-  // ============================================================
+  //------------------------------------------------------------
+  // NODES
+  //------------------------------------------------------------
 
-  void reset() {
-    _state = CanvasState.initial();
+  void addNode(CanvasNode node) {
+    _state.addNode(node);
     notifyListeners();
   }
 
-  // ============================================================
+  void removeNode(String id) {
+    _state.removeNode(id);
+    notifyListeners();
+  }
+
+  void moveNode(
+    String id,
+    Offset delta,
+  ) {
+    _state.moveNode(id, delta);
+    notifyListeners();
+  }
+
+  //------------------------------------------------------------
+  // SELECTION
+  //------------------------------------------------------------
+
+  void selectNode(String id) {
+    _state.selectNode(id);
+    notifyListeners();
+  }
+
+  void clearSelection() {
+    _state.clearSelection();
+    notifyListeners();
+  }
+
+  //------------------------------------------------------------
+  // CONNECTIONS
+  //------------------------------------------------------------
+
+  void addConnection(
+    NodeConnection connection,
+  ) {
+    _state.addConnection(connection);
+    notifyListeners();
+  }
+
+  void removeConnection(String id) {
+    _state.removeConnection(id);
+    notifyListeners();
+  }
+
+  //------------------------------------------------------------
+  // RESET
+  //------------------------------------------------------------
+
+  void resetViewport() {
+    _viewport = const CanvasViewport.initial();
+    notifyListeners();
+  }
+
+  void clearCanvas() {
+    _state.clear();
+    notifyListeners();
+  }
+
+  //------------------------------------------------------------
   // DEBUG
-  // ============================================================
+  //------------------------------------------------------------
 
   @override
   String toString() {
     return '''
 CanvasController
--------------------------
-Offset X : ${viewport.offsetX}
-Offset Y : ${viewport.offsetY}
-Zoom     : ${viewport.zoom}
+
+Viewport
+--------
+Offset X : ${_viewport.offsetX}
+Offset Y : ${_viewport.offsetY}
+Zoom     : ${_viewport.zoom}
+
+Canvas
+------
+Nodes       : ${_state.nodeCount}
+Connections : ${_state.connectionCount}
+Selected    : ${_state.selectedNodeId}
 ''';
   }
 }

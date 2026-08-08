@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart' hide Viewport;
+import 'package:flutter/material.dart';
 
-import 'viewport.dart';
+import 'canvas_viewport.dart';
 
 /// ============================================================
 /// LIA-Make
@@ -28,8 +28,8 @@ class PanController {
   /// Mover el viewport por un desplazamiento.
   /// ----------------------------------------------------------
 
-  Viewport pan({
-    required Viewport viewport,
+  CanvasViewport pan({
+    required CanvasViewport viewport,
     required Offset delta,
   }) {
     return viewport.translate(
@@ -42,8 +42,8 @@ class PanController {
   /// Mover usando valores numéricos.
   /// ----------------------------------------------------------
 
-  Viewport move({
-    required Viewport viewport,
+  CanvasViewport move({
+    required CanvasViewport viewport,
     required double dx,
     required double dy,
   }) {
@@ -57,7 +57,7 @@ class PanController {
   /// Centrar el mundo.
   /// ----------------------------------------------------------
 
-  Viewport center(Viewport viewport) {
+  CanvasViewport center(CanvasViewport viewport) {
     return viewport.copyWith(
       offsetX: 0,
       offsetY: 0,
@@ -68,8 +68,8 @@ class PanController {
   /// Posicionar el viewport en coordenadas específicas.
   /// ----------------------------------------------------------
 
-  Viewport moveTo({
-    required Viewport viewport,
+  CanvasViewport moveTo({
+    required CanvasViewport viewport,
     required double x,
     required double y,
   }) {
@@ -83,7 +83,7 @@ class PanController {
   /// Reset completo.
   /// ----------------------------------------------------------
 
-  Viewport reset(Viewport viewport) {
+  CanvasViewport reset(CanvasViewport viewport) {
     return viewport.reset();
   }
 }

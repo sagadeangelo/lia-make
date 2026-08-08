@@ -21,23 +21,28 @@ import 'package:flutter/foundation.dart';
 class SelectionController extends ChangeNotifier {
   SelectionController();
 
-  /// IDs de los nodos seleccionados.
+  //------------------------------------------------------------
+  // Selected Nodes
+  //------------------------------------------------------------
+
   final Set<String> _selectedNodes = {};
 
-  /// ----------------------------------------------------------
-  /// Getters
-  /// ----------------------------------------------------------
+  //------------------------------------------------------------
+  // Getters
+  //------------------------------------------------------------
 
   Set<String> get selectedNodes =>
       Set.unmodifiable(_selectedNodes);
 
-  bool get hasSelection => _selectedNodes.isNotEmpty;
+  bool get hasSelection =>
+      _selectedNodes.isNotEmpty;
 
-  int get selectionCount => _selectedNodes.length;
+  int get selectionCount =>
+      _selectedNodes.length;
 
-  /// ----------------------------------------------------------
-  /// Seleccionar un nodo.
-  /// ----------------------------------------------------------
+  //------------------------------------------------------------
+  // Single Selection
+  //------------------------------------------------------------
 
   void select(String nodeId) {
     _selectedNodes
@@ -47,27 +52,29 @@ class SelectionController extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// ----------------------------------------------------------
-  /// Agregar un nodo a la selección.
-  /// ----------------------------------------------------------
+  //------------------------------------------------------------
+  // Add
+  //------------------------------------------------------------
 
   void add(String nodeId) {
     _selectedNodes.add(nodeId);
+
     notifyListeners();
   }
 
-  /// ----------------------------------------------------------
-  /// Quitar un nodo.
-  /// ----------------------------------------------------------
+  //------------------------------------------------------------
+  // Remove
+  //------------------------------------------------------------
 
   void remove(String nodeId) {
     _selectedNodes.remove(nodeId);
+
     notifyListeners();
   }
 
-  /// ----------------------------------------------------------
-  /// Alternar selección.
-  /// ----------------------------------------------------------
+  //------------------------------------------------------------
+  // Toggle
+  //------------------------------------------------------------
 
   void toggle(String nodeId) {
     if (_selectedNodes.contains(nodeId)) {
@@ -79,11 +86,13 @@ class SelectionController extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// ----------------------------------------------------------
-  /// Seleccionar múltiples nodos.
-  /// ----------------------------------------------------------
+  //------------------------------------------------------------
+  // Multi Selection
+  //------------------------------------------------------------
 
-  void selectMany(List<String> nodeIds) {
+  void selectMany(
+    List<String> nodeIds,
+  ) {
     _selectedNodes
       ..clear()
       ..addAll(nodeIds);
@@ -91,28 +100,31 @@ class SelectionController extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// ----------------------------------------------------------
-  /// Limpiar selección.
-  /// ----------------------------------------------------------
+  //------------------------------------------------------------
+  // Clear
+  //------------------------------------------------------------
 
   void clear() {
     _selectedNodes.clear();
+
     notifyListeners();
   }
 
-  /// ----------------------------------------------------------
-  /// Verificar selección.
-  /// ----------------------------------------------------------
+  //------------------------------------------------------------
+  // Helpers
+  //------------------------------------------------------------
 
   bool isSelected(String nodeId) {
     return _selectedNodes.contains(nodeId);
   }
 
-  /// ----------------------------------------------------------
-  /// Seleccionar todos.
-  /// ----------------------------------------------------------
+  //------------------------------------------------------------
+  // Select All
+  //------------------------------------------------------------
 
-  void selectAll(List<String> nodeIds) {
+  void selectAll(
+    List<String> nodeIds,
+  ) {
     _selectedNodes
       ..clear()
       ..addAll(nodeIds);
@@ -120,11 +132,15 @@ class SelectionController extends ChangeNotifier {
     notifyListeners();
   }
 
+  //------------------------------------------------------------
+  // Debug
+  //------------------------------------------------------------
+
   @override
   String toString() {
     return '''
 SelectionController
--------------------------
+
 Selected: $_selectedNodes
 Count: $selectionCount
 ''';
